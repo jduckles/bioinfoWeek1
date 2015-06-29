@@ -19,14 +19,14 @@ cat seq/R1_1.fastq seq/R1_2.fastq seq/R1_3.fastq seq/R1_4.fastq > seq/R1.fastq
 cat seq/R2_1.fastq seq/R2_2.fastq seq/R2_3.fastq seq/R2_4.fastq > seq/R2.fastq
 
 # Join R1 and R2 reads using PEAR, a Paired-End reAd mergeR
-pear -f seq/R1.fastq -r seq/R2.fastq -o seq/Amp -p 0.001 -v 100 -m 450 -n 250 -y 500m -j 4
+pear -f seq/R1.fastq -r seq/R2.fastq -o seq/Amp -p 0.001 -v 100 -m 450 -n 250 -y 500m -j 1
 
 # Use QIIME to prepare your FASTQ files. 
 echo “Starting… Extracting barcodes”
-extract_barcodes.py -a -f seq/Amp.assembled.fastq -m tags.txt -l 12 -o seq/prepped/
+extract_barcodes.py -a -f seq/Amp.assembled.fastq -m seq/tags.txt -l 12 -o seq/prepped/
 
 # Use QIIME to demultiplex the data, with -q 0. Store output as fastq format (we will quality filter with usearch). This part of the analysis was taken from suggestions within the QIIME forums on best practices to integrate UPARSE into a usable QIIME workflow.
 echo “Splitting Libraries”
-split_libraries_fastq.py -i seq/prepped/reads.fastq -b seq/prepped/barcodes.fastq -m tags.txt --barcode_type 12 -o seq/SlOut/
+split_libraries_fastq.py -i seq/prepped/reads.fastq -b seq/prepped/barcodes.fastq -m seq/tags.txt --barcode_type 12 -o seq/SlOut/
 
 echo "All done- check out the results of split_libraries_fastq.py in the seq/SlOut/ directory."
